@@ -1,6 +1,6 @@
-## Hello!
+## Wrangle Data
 
-This repository will hold all of my regression exercices in addition to files like wrangle.ipynb.
+This repository will hold all of my regression exercices in addition to files like wrangle.ipynb and wrangle.py.
 
 wrangle.ipynb will hold functions that will do the following:
 
