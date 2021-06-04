@@ -61,3 +61,49 @@ def wrangle_telco():
     df['total_charges'] = df['total_charges'].astype('float')    
     return df
 
+
+
+
+
+##### ZILLOW FUNCTIONS #####
+
+def new_zillow_data():
+    '''
+    gets zillow information from CodeUp db and creates a dataframe
+    '''
+
+    # SQL query
+    zillow_query = '''SELECT bedroomcnt, bathroomcnt, calculatedfinishedsquarefeet, taxvaluedollarcnt, yearbuilt, taxamount, fips
+                      FROM properties_2017
+                      WHERE propertylandusetypeid = 261'''
+    
+    # reads SQL query into a DataFrame            
+    df = pd.read_sql(zillow_query, get_connection('zillow'))
+    
+    return df
+
+def wrangle_zillow():
+    '''
+    checks for existing zillow csv file and loads if present,
+    otherwise runs new_zillow_data function to acquire data
+    '''
+    
+    # checks for existing file and loads
+    if os.path.isfile('zillow.csv'):
+        
+        df = pd.read_csv('zillow.csv', index_col=0)
+        
+    else:
+        
+        # pull in data and creates csv file if not already present
+        df = new_zillow_data()
+        
+        df.to_csv('zillow.csv')
+        
+    # replace symbols, etc with NaN's
+    df = df.replace(r'^\s*$', np.nan, regex=True)
+    
+    # drop nulls
+    df = df.dropna()
+        
+    return df
